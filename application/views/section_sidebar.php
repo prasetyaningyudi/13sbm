@@ -59,7 +59,7 @@
 				  <?php if($value->PERMALINK == '#' OR $value->PERMALINK == '' OR $value->PERMALINK == NULL): ?>
 					<a><i class="fa fa-<?php echo $value->MENU_ICON; ?>"></i> <?php echo $value->MENU_NAME; ?> <span class="fa fa-chevron-down"></span></a>
 				  <?php else: ?>
-				    <?php echo '<a href="'.$value->PERMALINK.'">'; ?>
+				    <?php echo '<a href="'.base_url().$value->PERMALINK.'">'; ?>
 				    <i class="fa fa-<?php echo $value->MENU_ICON; ?>"></i> <?php echo $value->MENU_NAME; ?></a>
 				  <?php endif; ?>
                     <ul class="nav child_menu">
@@ -69,7 +69,7 @@
 							  <?php if($val->PERMALINK == '#' OR $val->PERMALINK == '' OR $val->PERMALINK == NULL): ?>
 							  <a>
 							  <?php else: ?>
-							  <?php echo '<a href="'.$val->PERMALINK.'">'; ?>
+							  <?php echo '<a href="'.base_url().$val->PERMALINK.'">'; ?>
 							  <?php endif; ?>
 							  <?php echo $val->MENU_NAME; ?>
 							  </a>
