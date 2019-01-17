@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Sbuhpddn extends CI_Controller {
+class Sbtppddnpp extends CI_Controller {
 	private $data;
 	
 	public function __construct(){
@@ -10,9 +10,8 @@ class Sbuhpddn extends CI_Controller {
 		$this->load->library('auth');				
 		$this->load->helper('url');			
 		$this->load->database();
-		$this->load->model('sbuhpddn_model');
-		$this->load->model('provinsi_model');
-		$this->load->model('satuan_model');
+		$this->load->model('sbtppddnpp_model');
+		$this->load->model('kota_model');
 		$this->load->model('role_model');
 		$this->load->model('menu_model');
 		$this->data['menu'] = $this->menu_model->get_menu($this->session->userdata('ROLE_ID'));
@@ -20,7 +19,7 @@ class Sbuhpddn extends CI_Controller {
 		$this->load->model('app_data_model');		
 		$this->data['app_data'] = $this->app_data_model->get();		
 		$this->data['error'] = array();
-		$this->data['title'] = 'Satuan Biaya Uang Harian Perjalanan Dinas Dalam Negeri';
+		$this->data['title'] = 'Satuan Biaya Tiket Pesawat Perjalanan Dinas Dalam Negeri Pergi Pulang (PP)';
 	}
 
 	public function index(){
@@ -42,15 +41,22 @@ class Sbuhpddn extends CI_Controller {
 		}			
 		$filters = array();
 		$limit = array('20', '0');
-		$r_provinsi = '';
+		$r_kota_asal = '';
+		$r_kota_tujuan = '';
 
 		if(isset($_POST['submit'])){
-			if (isset($_POST['provinsi'])) {
-				if ($_POST['provinsi'] != '' or $_POST['provinsi'] != null) {
-					$filters[] = "A.PROVINSI_ID = '" . $_POST['provinsi'] . "'";
-					$r_provinsi = $_POST['provinsi'];
+			if (isset($_POST['kota_asal'])) {
+				if ($_POST['kota_asal'] != '' or $_POST['kota_asal'] != null) {
+					$filters[] = "A.KOTA_ASAL_ID = '" . $_POST['kota_asal'] . "'";
+					$r_kota_asal = $_POST['kota_asal'];
 				}
 			}
+			if (isset($_POST['kota_tujuan'])) {
+				if ($_POST['kota_tujuan'] != '' or $_POST['kota_tujuan'] != null) {
+					$filters[] = "A.KOTA_TUJUAN_ID = '" . $_POST['kota_tujuan'] . "'";
+					$r_kota_tujuan = $_POST['kota_tujuan'];
+				}
+			}			
 			if (isset($_POST['offset'])) {
 				if ($_POST['offset'] != '' or $_POST['offset'] != null) {
 					$limit[1] = $_POST['offset'];
@@ -58,8 +64,8 @@ class Sbuhpddn extends CI_Controller {
 			}			
 		}
 		
-		$data = $this->sbuhpddn_model->get($filters, $limit);
-		$total_data = count($this->sbuhpddn_model->get($filters));
+		$data = $this->sbtppddnpp_model->get($filters, $limit);
+		$total_data = count($this->sbtppddnpp_model->get($filters));
 		$limit[] = $total_data;
 		
 		//var_dump($data);
@@ -76,11 +82,10 @@ class Sbuhpddn extends CI_Controller {
 					$body[$no_body] = array(
 						(object) array( 'classes' => ' hidden ', 'value' => $value->ID ),
 						(object) array( 'classes' => ' bold align-left ', 'value' => $no_body+1 ),
-						(object) array( 'classes' => ' align-left ', 'value' => $value->PROVINSI ),
-						(object) array( 'classes' => ' align-center ', 'value' => $value->SATUAN ),						
-						(object) array( 'classes' => ' align-right ', 'value' => number_format($value->LUAR_KOTA, 0, ',', '.') ),
-						(object) array( 'classes' => ' align-right ', 'value' => number_format($value->DALAM_KOTA, 0, ',', '.') ),
-						(object) array( 'classes' => ' align-right ', 'value' => number_format($value->DIKLAT, 0, ',', '.') ),
+						(object) array( 'classes' => ' align-left ', 'value' => $value->KOTA_ASAL ),
+						(object) array( 'classes' => ' align-left ', 'value' => $value->KOTA_TUJUAN ),					
+						(object) array( 'classes' => ' align-right ', 'value' => number_format($value->BISNIS, 0, ',', '.') ),
+						(object) array( 'classes' => ' align-right ', 'value' => number_format($value->EKONOMI, 0, ',', '.') ),
 						(object) array( 'classes' => ' align-center ', 'value' => $value->STATUS ),
 					);
 					$no_body++;
@@ -94,34 +99,49 @@ class Sbuhpddn extends CI_Controller {
 		
 		$header = array(
 			array (
-				(object) array ('rowspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'No'),
-				(object) array ('colspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'provinsi'),					
-				(object) array ('rowspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'satuan'),			
-				(object) array ('rowspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'luar kota'),			
-				(object) array ('rowspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'dalam kota lebih dari 8 jam'),		
-				(object) array ('rowspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'diklat'),		
-				(object) array ('rowspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'status'),		
+				(object) array ('rowspan' => 2, 'classes' => 'bold align-center capitalize', 'value' => 'No'),
+				(object) array ('colspan' => 2, 'classes' => 'bold align-center capitalize', 'value' => 'kota'),					
+				(object) array ('colspan' => 2, 'classes' => 'bold align-center capitalize', 'value' => 'satuan biaya tiket'),
+				(object) array ('rowspan' => 2, 'classes' => 'bold align-center capitalize', 'value' => 'status'),					
+			),
+			array (
+				(object) array ('rowspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'Asal'),					
+				(object) array ('rowspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'Tujuan'),			
+				(object) array ('rowspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'Bisnis'),			
+				(object) array ('rowspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'Ekonomi'),				
 			)		
 		);
 		
-		$provinsi = array();
-		$data = $this->provinsi_model->get();
+		$kota_asal = array();
+		$kota_tujuan = array();
+		$data = $this->kota_model->get();
 		if (empty($data)) {
 			
 		} else {
 			foreach ($data as $value) {
-				$provinsi[] = (object) array('label'=>$value->NAMA, 'value'=>$value->ID);
+				$kota_asal[] = (object) array('label'=>$value->NAMA, 'value'=>$value->ID);
+				$kota_tujuan[] = (object) array('label'=>$value->NAMA, 'value'=>$value->ID);
 			}
 		}		
 			
 		$fields = array();
 		$fields[] = (object) array(
 			'type' 			=> 'select',
-			'label' 		=> 'provinsi',
-			'name' 			=> 'provinsi',
-			'placeholder'	=> '--Select Provinsi--',
-			'value' 		=> $r_provinsi,
-			'options'		=> $provinsi,
+			'label' 		=> 'Kota Asal',
+			'name' 			=> 'kota_asal',
+			'placeholder'	=> '--Select Kota Asal--',
+			'value' 		=> $r_kota_asal,
+			'options'		=> $kota_asal,
+			'classes' 		=> 'full-width
+			',
+		);		
+		$fields[] = (object) array(
+			'type' 			=> 'select',
+			'label' 		=> 'Kota Tujuan',
+			'name' 			=> 'kota_tujuan',
+			'placeholder'	=> '--Select Kota Tujuan--',
+			'value' 		=> $r_kota_tujuan,
+			'options'		=> $kota_tujuan,
 			'classes' 		=> 'full-width
 			',
 		);				
@@ -157,45 +177,38 @@ class Sbuhpddn extends CI_Controller {
 			//validation
 			$error_info = array();
 			$error_status = false;
-			if($_POST['provinsi'] == ''){
-				$error_info[] = 'provinsi can not be null';
+			if($_POST['kota_asal'] == ''){
+				$error_info[] = 'kota asal can not be null';
 				$error_status = true;
 			}
-			if($_POST['satuan'] == ''){
-				$error_info[] = 'satuan can not be null';
+			if($_POST['kota_tujuan'] == ''){
+				$error_info[] = 'kota tujuan can not be null';
+				$error_status = true;
+			}			
+			if($_POST['bisnis'] == ''){
+				$error_info[] = 'bisnis can not be null';
 				$error_status = true;
 			}
-			if($_POST['luar_kota'] == ''){
-				$error_info[] = 'luar kota can not be null';
-				$error_status = true;
-			}
-			if($_POST['dalam_kota'] == ''){
-				$error_info[] = 'dalam kota can not be null';
-				$error_status = true;
-			}
-			if($_POST['diklat'] == ''){
-				$error_info[] = 'diklat can not be null';
+			if($_POST['ekonomi'] == ''){
+				$error_info[] = 'ekonomi can not be null';
 				$error_status = true;
 			}
 			
 			$filter = array();
-			$filter[] = "A.PROVINSI_ID = '". $_POST['provinsi']."'";
-			$data = $this->sbuhpddn_model->get($filter);
+			$filter[] = "A.KOTA_ASAL_ID = '". $_POST['kota_asal']."'";
+			$filter[] = "A.KOTA_TUJUAN_ID = '". $_POST['kota_tujuan']."'";
+			$data = $this->sbtppddnpp_model->get($filter);
 			if(!empty($data)){
 				$error_info[] = 'This pair has been inputted';
 				$error_status = true;				
 			}
 
-			if(!is_numeric($_POST['luar_kota'])){
-				$error_info[] = 'Luar Kota Only numeric allowed';
+			if(!is_numeric($_POST['bisnis'])){
+				$error_info[] = 'bisnis Only numeric allowed';
 				$error_status = true;				
-			}
-			if(!is_numeric($_POST['dalam_kota'])){
-				$error_info[] = 'Dalam Kota Only numeric allowed';
-				$error_status = true;				
-			}
-			if(!is_numeric($_POST['diklat'])){
-				$error_info[] = 'Diklat Only numeric allowed';
+			}			
+			if(!is_numeric($_POST['ekonomi'])){
+				$error_info[] = 'ekonomi Only numeric allowed';
 				$error_status = true;				
 			}
 			
@@ -209,14 +222,13 @@ class Sbuhpddn extends CI_Controller {
 				echo json_encode($this->data['error']);
 			}else{
 				$this->data['insert'] = array(
-						'PROVINSI_ID' => $_POST['provinsi'],
-						'SATUAN_ID' => $_POST['satuan'],
-						'LUAR_KOTA' => $_POST['luar_kota'],
-						'DALAM_KOTA' => $_POST['dalam_kota'],
-						'DIKLAT' => $_POST['diklat'],
+						'KOTA_ASAL_ID' => $_POST['kota_asal'],
+						'KOTA_TUJUAN_ID' => $_POST['kota_tujuan'],
+						'BISNIS' => $_POST['bisnis'],
+						'EKONOMI' => $_POST['ekonomi'],
 					);						
 
-				$result = $this->sbuhpddn_model->insert($this->data['insert']);
+				$result = $this->sbtppddnpp_model->insert($this->data['insert']);
 				$info = array();
 				$info[] = 'Insert data success';
 				$this->data['success'] = (object) array (
@@ -228,68 +240,50 @@ class Sbuhpddn extends CI_Controller {
 				echo json_encode($this->data['success']);			
 			}
 		}else{
-			$provinsi = array();
-			$data = $this->provinsi_model->get();
+			$kota_asal = array();
+			$kota_tujuan = array();
+			$data = $this->kota_model->get();
 			if (empty($data)) {
 				
 			} else {
 				foreach ($data as $value) {
-					$provinsi[] = (object) array('label'=>$value->NAMA, 'value'=>$value->ID);
+					$kota_asal[] = (object) array('label'=>$value->NAMA, 'value'=>$value->ID);
+					$kota_tujuan[] = (object) array('label'=>$value->NAMA, 'value'=>$value->ID);
 				}
-			}	
+			}		
 			
-			$satuan = array();
-			$filter = array();
-			$filter[] = "NAMA like '%OH%'";
-			$data = $this->satuan_model->get($filter);
-			if (empty($data)) {
-				
-			} else {
-				foreach ($data as $value) {
-					$satuan[] = (object) array('label'=>$value->NAMA, 'value'=>$value->ID);
-				}
-			}			
-				
 			$fields = array();
 			$fields[] = (object) array(
 				'type' 			=> 'select',
-				'label' 		=> 'provinsi',
-				'name' 			=> 'provinsi',
-				'placeholder'	=> '--Select Provinsi--',
+				'label' 		=> 'kota asal',
+				'name' 			=> 'kota_asal',
+				'placeholder'	=> '--Select Kota Asal--',
 				'value' 		=> '',
-				'options'		=> $provinsi,
+				'options'		=> $kota_asal,
 				'classes' 		=> '',
 			);			
 			$fields[] = (object) array(
 				'type' 			=> 'select',
-				'label' 		=> 'satuan',
-				'name' 			=> 'satuan',
-				'placeholder'	=> '',
+				'label' 		=> 'kota tujuan',
+				'name' 			=> 'kota_tujuan',
+				'placeholder'	=> '--Select Kota Tujuan--',
 				'value' 		=> '',
-				'options'		=> $satuan,
+				'options'		=> $kota_tujuan,
 				'classes' 		=> '',
-			);
+			);			
 			$fields[] = (object) array(
 				'type' 			=> 'text',
-				'label' 		=> 'luar kota',
-				'name' 			=> 'luar_kota',
-				'placeholder'	=> 'luar kota',
+				'label' 		=> 'bisnis',
+				'name' 			=> 'bisnis',
+				'placeholder'	=> 'bisnis',
 				'value' 		=> '',
 				'classes' 		=> 'full-width',
-			);
+			);			
 			$fields[] = (object) array(
 				'type' 			=> 'text',
-				'label' 		=> 'dalam kota',
-				'name' 			=> 'dalam_kota',
-				'placeholder'	=> 'dalam kota',
-				'value' 		=> '',
-				'classes' 		=> 'full-width',
-			);
-			$fields[] = (object) array(
-				'type' 			=> 'text',
-				'label' 		=> 'diklat',
-				'name' 			=> 'diklat',
-				'placeholder'	=> 'diklat',
+				'label' 		=> 'ekonomi',
+				'name' 			=> 'ekonomi',
+				'placeholder'	=> 'ekonomi',
 				'value' 		=> '',
 				'classes' 		=> 'full-width',
 			);				
@@ -313,48 +307,42 @@ class Sbuhpddn extends CI_Controller {
 		if(isset($_POST['submit'])){
 			$error_info = array();
 			$error_status = false;
-			if($_POST['provinsi'] == ''){
-				$error_info[] = 'provinsi can not be null';
+			if($_POST['kota_asal'] == ''){
+				$error_info[] = 'kota asal can not be null';
 				$error_status = true;
 			}
-			if($_POST['satuan'] == ''){
-				$error_info[] = 'satuan can not be null';
+			if($_POST['kota_tujuan'] == ''){
+				$error_info[] = 'kota tujuan can not be null';
+				$error_status = true;
+			}			
+			if($_POST['bisnis'] == ''){
+				$error_info[] = 'bisnis can not be null';
 				$error_status = true;
 			}
-			if($_POST['luar_kota'] == ''){
-				$error_info[] = 'luar kota can not be null';
-				$error_status = true;
-			}
-			if($_POST['dalam_kota'] == ''){
-				$error_info[] = 'dalam kota can not be null';
-				$error_status = true;
-			}
-			if($_POST['diklat'] == ''){
-				$error_info[] = 'diklat can not be null';
+			if($_POST['ekonomi'] == ''){
+				$error_info[] = 'ekonomi can not be null';
 				$error_status = true;
 			}
 			
 			$filter = array();
-			$filter[] = "A.PROVINSI_ID = '". $_POST['provinsi']."'";
-			$filter[] = "A.ID != '". $_POST['id']."'";
-			$data = $this->sbuhpddn_model->get($filter);
+			$filter[] = "A.KOTA_ASAL_ID = '". $_POST['kota_asal']."'";
+			$filter[] = "A.KOTA_TUJUAN_ID = '". $_POST['kota_tujuan']."'";
+			$filter[] = "A.ID != '". $_POST['id']."'";			
+			$data = $this->sbtppddnpp_model->get($filter);
 			if(!empty($data)){
 				$error_info[] = 'This pair has been inputted';
 				$error_status = true;				
 			}
 
-			if(!is_numeric($_POST['luar_kota'])){
-				$error_info[] = 'Luar Kota Only numeric allowed';
+			if(!is_numeric($_POST['bisnis'])){
+				$error_info[] = 'bisnis Only numeric allowed';
+				$error_status = true;				
+			}			
+			if(!is_numeric($_POST['ekonomi'])){
+				$error_info[] = 'ekonomi Only numeric allowed';
 				$error_status = true;				
 			}
-			if(!is_numeric($_POST['dalam_kota'])){
-				$error_info[] = 'Dalam Kota Only numeric allowed';
-				$error_status = true;				
-			}
-			if(!is_numeric($_POST['diklat'])){
-				$error_info[] = 'Diklat Only numeric allowed';
-				$error_status = true;				
-			}
+			
 			
 			if($error_status == true){
 				$this->data['error'] = (object) array (
@@ -366,14 +354,13 @@ class Sbuhpddn extends CI_Controller {
 				echo json_encode($this->data['error']);
 			}else{
 				$this->data['update'] = array(
-						'PROVINSI_ID' => $_POST['provinsi'],
-						'SATUAN_ID' => $_POST['satuan'],
-						'LUAR_KOTA' => $_POST['luar_kota'],
-						'DALAM_KOTA' => $_POST['dalam_kota'],
-						'DIKLAT' => $_POST['diklat'],
+						'KOTA_ASAL_ID' => $_POST['kota_asal'],
+						'KOTA_TUJUAN_ID' => $_POST['kota_tujuan'],
+						'BISNIS' => $_POST['bisnis'],
+						'EKONOMI' => $_POST['ekonomi'],
 					);						
 
-				$result = $this->sbuhpddn_model->update($this->data['update'], $_POST['id']);
+				$result = $this->sbtppddnpp_model->update($this->data['update'], $_POST['id']);
 				echo json_encode($result);
 					$info = array();
 					$info[] = 'Update data successfully';						
@@ -386,43 +373,31 @@ class Sbuhpddn extends CI_Controller {
 			}	
 		}else{
 			$r_id = '';
-			$r_provinsi = '';
-			$r_satuan = '';
-			$r_dalam_kota = '';
-			$r_luar_kota = '';
-			$r_diklat = '';
+			$r_kota_asal = '';
+			$r_kota_tujuan = '';
+			$r_bisnis = '';
+			$r_ekonomi = '';
 			
 			$filter = array();
 			$filter[] = "A.ID = ". $_POST['id'];
-			$this->data['result'] = $this->sbuhpddn_model->get($filter);
+			$this->data['result'] = $this->sbtppddnpp_model->get($filter);
 			foreach($this->data['result'] as $value){
 				$r_id 	= $value->ID;
-				$r_provinsi = $value->PROVINSI_ID;
-				$r_satuan = $value->SATUAN_ID;
-				$r_dalam_kota = $value->DALAM_KOTA;
-				$r_luar_kota = $value->LUAR_KOTA;
-				$r_diklat = $value->DIKLAT;
+				$r_kota_asal = $value->KOTA_ASAL_ID;
+				$r_kota_tujuan = $value->KOTA_TUJUAN_ID;
+				$r_bisnis = $value->BISNIS;
+				$r_ekonomi = $value->EKONOMI;
 			}			
 			
-			$provinsi = array();
-			$data = $this->provinsi_model->get();
+			$kota_asal = array();
+			$kota_tujuan = array();
+			$data = $this->kota_model->get();
 			if (empty($data)) {
 				
 			} else {
 				foreach ($data as $value) {
-					$provinsi[] = (object) array('label'=>$value->NAMA, 'value'=>$value->ID);
-				}
-			}	
-			
-			$satuan = array();
-			$filter = array();
-			$filter[] = "NAMA like '%OH%'";
-			$data = $this->satuan_model->get($filter);
-			if (empty($data)) {
-				
-			} else {
-				foreach ($data as $value) {
-					$satuan[] = (object) array('label'=>$value->NAMA, 'value'=>$value->ID);
+					$kota_asal[] = (object) array('label'=>$value->NAMA, 'value'=>$value->ID);
+					$kota_tujuan[] = (object) array('label'=>$value->NAMA, 'value'=>$value->ID);
 				}
 			}		
 				
@@ -436,46 +411,38 @@ class Sbuhpddn extends CI_Controller {
 			);				
 			$fields[] = (object) array(
 				'type' 			=> 'select',
-				'label' 		=> 'provinsi',
-				'name' 			=> 'provinsi',
-				'placeholder'	=> '--Select Provinsi--',
-				'value' 		=> $r_provinsi,
-				'options'		=> $provinsi,
+				'label' 		=> 'kota asal',
+				'name' 			=> 'kota_asal',
+				'placeholder'	=> '--Select Kota Tujuan--',
+				'value' 		=> $r_kota_asal,
+				'options'		=> $kota_asal,
 				'classes' 		=> '',
 			);			
 			$fields[] = (object) array(
 				'type' 			=> 'select',
-				'label' 		=> 'satuan',
-				'name' 			=> 'satuan',
-				'placeholder'	=> '',
-				'value' 		=> $r_satuan,
-				'options'		=> $satuan,
+				'label' 		=> 'kota tujuan',
+				'name' 			=> 'kota_tujuan',
+				'placeholder'	=> '--Select Kota Asal--',
+				'value' 		=> $r_kota_tujuan,
+				'options'		=> $kota_tujuan,
 				'classes' 		=> '',
 			);
 			$fields[] = (object) array(
 				'type' 			=> 'text',
-				'label' 		=> 'luar kota',
-				'name' 			=> 'luar_kota',
-				'placeholder'	=> 'luar kota',
-				'value' 		=> $r_luar_kota,
+				'label' 		=> 'bisnis',
+				'name' 			=> 'bisnis',
+				'placeholder'	=> 'bisnis',
+				'value' 		=> $r_bisnis,
 				'classes' 		=> 'full-width',
-			);
+			);			
 			$fields[] = (object) array(
 				'type' 			=> 'text',
-				'label' 		=> 'dalam kota',
-				'name' 			=> 'dalam_kota',
-				'placeholder'	=> 'dalam kota',
-				'value' 		=> $r_dalam_kota,
+				'label' 		=> 'ekonomi',
+				'name' 			=> 'ekonomi',
+				'placeholder'	=> 'ekonomi',
+				'value' 		=> $r_ekonomi,
 				'classes' 		=> 'full-width',
-			);
-			$fields[] = (object) array(
-				'type' 			=> 'text',
-				'label' 		=> 'diklat',
-				'name' 			=> 'diklat',
-				'placeholder'	=> 'diklat',
-				'value' 		=> $r_diklat,
-				'classes' 		=> 'full-width',
-			);	
+			);		
 
 			$this->data['update'] = (object) array (
 				'type'  	=> 'update_default',
@@ -496,7 +463,7 @@ class Sbuhpddn extends CI_Controller {
 		if(isset($_POST['id']) and $_POST['id'] != null){
 			$filters = array();
 			$filters[] = "A.ID = ". $_POST['id'];
-			$data = $this->sbuhpddn_model->get($filters);
+			$data = $this->sbtppddnpp_model->get($filters);
 			
 			$body= array();			
 			if (empty($data)) {
@@ -506,25 +473,21 @@ class Sbuhpddn extends CI_Controller {
 			} else {
 				foreach($data as $value){
 					$body[] = array(
-						(object) array( 'classes' => ' bold align-left ', 'value' => 'Provinsi' ),
-						(object) array( 'classes' => ' align-left ', 'value' => $value->PROVINSI ),
+						(object) array( 'classes' => ' bold align-left ', 'value' => 'Kota Asal' ),
+						(object) array( 'classes' => ' align-left ', 'value' => $value->KOTA_ASAL ),
+					);					
+					$body[] = array(
+						(object) array( 'classes' => ' bold align-left ', 'value' => 'Kota Tujuan' ),
+						(object) array( 'classes' => ' align-left ', 'value' => $value->KOTA_TUJUAN ),
 					);
 					$body[] = array(
-						(object) array( 'classes' => ' bold align-left ', 'value' => 'Satuan' ),
-						(object) array( 'classes' => ' align-left ', 'value' => $value->SATUAN ),
+						(object) array( 'classes' => ' bold align-left ', 'value' => 'Bisnis' ),
+						(object) array( 'classes' => ' align-left ', 'value' => number_format($value->BISNIS, 0, ',', '.') ),
 					);
 					$body[] = array(
-						(object) array( 'classes' => ' bold align-left ', 'value' => 'Luar Kota' ),
-						(object) array( 'classes' => ' align-left ', 'value' => number_format($value->LUAR_KOTA, 0, ',', '.') ),
-					);
-					$body[] = array(
-						(object) array( 'classes' => ' bold align-left ', 'value' => 'Dalam Kota' ),
-						(object) array( 'classes' => ' align-left ', 'value' => number_format($value->DALAM_KOTA, 0, ',', '.') ),
-					);
-					$body[] = array(
-						(object) array( 'classes' => ' bold align-left ', 'value' => 'Diklat' ),
-						(object) array( 'classes' => ' align-left ', 'value' => number_format($value->DIKLAT, 0, ',', '.') ),
-					);
+						(object) array( 'classes' => ' bold align-left ', 'value' => 'Ekonomi' ),
+						(object) array( 'classes' => ' align-left ', 'value' => number_format($value->EKONOMI, 0, ',', '.') ),
+					);					
 					$body[] = array(
 						(object) array( 'classes' => ' bold align-left ', 'value' => 'Status' ),
 						(object) array( 'classes' => ' align-left ', 'value' => $value->STATUS ),
@@ -567,7 +530,7 @@ class Sbuhpddn extends CI_Controller {
 			$filters = array();
 			$filters[] = "A.ID = ". $_POST['id'];
 			
-			$result = $this->sbuhpddn_model->get($filters);
+			$result = $this->sbtppddnpp_model->get($filters);
 			if($result != null){
 				foreach($result as $item){
 					$status = $item->STATUS;
@@ -583,7 +546,7 @@ class Sbuhpddn extends CI_Controller {
 					'STATUS' => $new_status,
 				);	
 				
-			$result = $this->sbuhpddn_model->update($this->data['update'], $_POST['id']);
+			$result = $this->sbtppddnpp_model->update($this->data['update'], $_POST['id']);
 			if($result == true){
 				$info = array();
 				$info[] = 'Update status data successfully';						
@@ -614,7 +577,7 @@ class Sbuhpddn extends CI_Controller {
 		$this->data['delete'] = array(
 				'ID' => $_POST['id'],
 			);		
-		$result = $this->sbuhpddn_model->delete($this->data['delete']);
+		$result = $this->sbtppddnpp_model->delete($this->data['delete']);
 		echo json_encode($result);
 
 		if($result == true){

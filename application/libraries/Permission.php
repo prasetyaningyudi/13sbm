@@ -15,6 +15,9 @@ $roles = array(
 				'provinsi' => array ('index', 'list', 'insert', 'update', 'delete', 'detail'),							
 				'kota' => array ('index', 'list', 'insert', 'update', 'delete', 'detail'),							
 				'sbuhpddn' => array ('index', 'list', 'insert', 'update', 'update_status', 'delete', 'detail'),							
+				'sbppddn' => array ('index', 'list', 'insert', 'update', 'update_status', 'delete', 'detail'),							
+				'sbtpddn' => array ('index', 'list', 'insert', 'update', 'update_status', 'delete', 'detail'),							
+				'sbtppddnpp' => array ('index', 'list', 'insert', 'update', 'update_status', 'delete', 'detail'),							
 			),
 			'supervisor' => array (
 				'user' => array ('index', 'list', 'insert', 'update', 'update_status', 'delete', 'detail', 'm_form_user_info', 'insert_user_info', 'm_user_info'),		

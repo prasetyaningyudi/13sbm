@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 17, 2019 at 02:58 AM
+-- Generation Time: Jan 17, 2019 at 09:39 AM
 -- Server version: 10.1.31-MariaDB
 -- PHP Version: 7.2.4
 
@@ -39,6 +39,13 @@ CREATE TABLE `app_data` (
   `USER_ID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `app_data`
+--
+
+INSERT INTO `app_data` (`ID`, `NAME`, `ICON`, `FAVICON`, `NOTES`, `CREATE_DATE`, `UPDATE_DATE`, `USER_ID`) VALUES
+(2, 'SBM APP', 'file-invoice-dollar', '', 'Aplikasi Standar Biaya Masukan TA 2019', '2019-01-17 10:02:43', '2019-01-17 10:02:43', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -57,10 +64,10 @@ CREATE TABLE `daftar_sbm` (
 --
 
 INSERT INTO `daftar_sbm` (`ID`, `KODE`, `KETERANGAN`, `STATUS`) VALUES
-(1, 'SBUHPDDN', 'Standar Biaya Uang Harian Perjalanan Dinas Dalam Negeri', 1),
-(2, 'SBPPDDN', 'Standar Biaya Penginapan Perjalanan Dinas Dalam Negeri', 1),
-(3, 'SBTPDDN', 'Standar Biaya Taksi Perjalanan Dinas Dalam Negeri', 1),
-(4, 'SBTPPDDNPP', 'Standar Biaya Tiket Pesawat Perjalanan Dinas Dalam Negeri Pulang Pergi', 1);
+(1, 'SBUHPDDN', 'Satuan Biaya Uang Harian Perjalanan Dinas Dalam Negeri', 1),
+(2, 'SBPPDDN', 'Satuan Biaya Penginapan Perjalanan Dinas Dalam Negeri', 1),
+(3, 'SBTPDDN', 'Satuan Biaya Taksi Perjalanan Dinas Dalam Negeri', 1),
+(4, 'SBTPPDDNPP', 'Satuan Biaya Tiket Pesawat Perjalanan Dinas Dalam Negeri Pergi Pulang', 1);
 
 -- --------------------------------------------------------
 
@@ -107,13 +114,23 @@ CREATE TABLE `menu` (
 --
 
 INSERT INTO `menu` (`ID`, `MENU_NAME`, `PERMALINK`, `MENU_ICON`, `MENU_ORDER`, `STATUS`, `CREATE_DATE`, `UPDATE_DATE`, `MENU_ID`) VALUES
-(1, 'Setup Menu', '#', 'bars', '01', '1', '2019-01-08 15:51:57', '2019-01-08 16:01:06', NULL),
-(2, 'User & Role', '#', 'users-cog', '02', '1', '2019-01-08 15:52:58', '2019-01-08 16:01:21', NULL),
-(3, 'Application Data', 'app_data', 'cogs', '03', '1', '2019-01-08 15:54:30', '2019-01-08 16:02:37', NULL),
-(4, 'List Menu', 'menu', 'bars', '0101', '1', '2019-01-08 15:55:15', '2019-01-08 15:55:15', 1),
-(5, 'Assign Menu', 'assignmenu', 'bar', '0102', '1', '2019-01-08 15:56:23', '2019-01-08 15:56:39', 1),
-(6, 'List User', 'user', '', '0201', '1', '2019-01-08 15:57:31', '2019-01-08 15:57:31', 2),
-(7, 'List Role', 'role', '', '0202', '1', '2019-01-08 15:57:57', '2019-01-08 15:57:57', 2);
+(1, 'Setup Menu', '#', 'bars', '11', '1', '2019-01-08 15:51:57', '2019-01-17 09:59:37', NULL),
+(2, 'User & Role', '#', 'users-cog', '12', '1', '2019-01-08 15:52:58', '2019-01-17 09:59:50', NULL),
+(3, 'Application Data', 'app_data', 'cogs', '13', '1', '2019-01-08 15:54:30', '2019-01-17 10:00:03', NULL),
+(4, 'List Menu', 'menu', 'bars', '1101', '1', '2019-01-08 15:55:15', '2019-01-17 09:59:41', 1),
+(5, 'Assign Menu', 'assignmenu', 'bar', '1102', '1', '2019-01-08 15:56:23', '2019-01-17 09:59:44', 1),
+(6, 'List User', 'user', '', '1201', '1', '2019-01-08 15:57:31', '2019-01-17 09:59:55', 2),
+(7, 'List Role', 'role', '', '1202', '1', '2019-01-08 15:57:57', '2019-01-17 09:59:58', 2),
+(8, 'Referensi', '#', 'clipboard-list', '03', '1', '2019-01-17 09:47:33', '2019-01-17 10:00:13', NULL),
+(9, 'Daftar SBM', 'daftar_sbm', '', '0301', '1', '2019-01-17 09:48:04', '2019-01-17 10:00:16', 8),
+(10, 'Satuan', 'satuan', '', '0302', '1', '2019-01-17 09:48:19', '2019-01-17 10:00:19', 8),
+(11, 'Provinsi', 'provinsi', '', '0303', '1', '2019-01-17 09:48:37', '2019-01-17 10:00:24', 8),
+(12, 'Kota', 'kota', '', '0304', '1', '2019-01-17 09:48:59', '2019-01-17 10:00:27', 8),
+(13, 'SBM 2019', '#', 'binoculars', '01', '1', '2019-01-17 12:20:12', '2019-01-17 12:22:43', NULL),
+(14, 'SBUHPDDN', 'sbuhpddn', '', '0101', '1', '2019-01-17 12:21:01', '2019-01-17 12:21:01', 13),
+(15, 'SBPPDDN', 'sbppddn', '', '0102', '1', '2019-01-17 13:11:13', '2019-01-17 13:11:13', 13),
+(16, 'SBTPDDN', 'sbtpddn', '', '0103', '1', '2019-01-17 14:29:51', '2019-01-17 14:29:51', 13),
+(17, 'SBTPPDDNPP', 'sbtppddnpp', '', '0104', '1', '2019-01-17 14:47:10', '2019-01-17 14:47:10', 13);
 
 -- --------------------------------------------------------
 
@@ -140,7 +157,8 @@ INSERT INTO `provinsi` (`ID`, `NAMA`) VALUES
 (7, 'SUMATERA SELATAN'),
 (8, 'LAMPUNG'),
 (9, 'BENGKULU'),
-(10, 'BANGKA BELITUNG');
+(10, 'BANGKA BELITUNG'),
+(12, 'BANTEN');
 
 -- --------------------------------------------------------
 
@@ -186,7 +204,17 @@ INSERT INTO `role_menu` (`ID`, `ROLE_ID`, `MENU_ID`) VALUES
 (4, 1, 2),
 (5, 1, 6),
 (6, 1, 7),
-(7, 1, 3);
+(7, 1, 3),
+(8, 1, 8),
+(9, 1, 9),
+(10, 1, 10),
+(11, 1, 11),
+(12, 1, 12),
+(13, 1, 13),
+(14, 1, 14),
+(15, 1, 15),
+(16, 1, 16),
+(17, 1, 17);
 
 -- --------------------------------------------------------
 
@@ -198,6 +226,14 @@ CREATE TABLE `satuan` (
   `ID` int(11) NOT NULL,
   `NAMA` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `satuan`
+--
+
+INSERT INTO `satuan` (`ID`, `NAMA`) VALUES
+(2, 'OH'),
+(3, 'Orang/Kali');
 
 -- --------------------------------------------------------
 
@@ -214,10 +250,18 @@ CREATE TABLE `sbppddn_2019` (
   `GOL_I_II` decimal(10,0) NOT NULL,
   `STATUS` varchar(1) NOT NULL DEFAULT '1',
   `CREATE_DATE` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `UDPATE_DATE` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `UPDATE_DATE` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `PROVINSI_ID` int(11) NOT NULL,
   `SATUAN_ID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `sbppddn_2019`
+--
+
+INSERT INTO `sbppddn_2019` (`ID`, `ES_I`, `ES_II`, `GOL_IV`, `GOL_III`, `GOL_I_II`, `STATUS`, `CREATE_DATE`, `UPDATE_DATE`, `PROVINSI_ID`, `SATUAN_ID`) VALUES
+(1, '4420000', '3526000', '3526000', '3526001', '3526001', '1', '2019-01-17 12:57:55', '2019-01-17 15:37:39', 1, 2),
+(2, '1', '1', '1', '1', '1', '1', '2019-01-17 15:37:48', '2019-01-17 15:37:48', 9, 2);
 
 -- --------------------------------------------------------
 
@@ -234,6 +278,14 @@ CREATE TABLE `sbtpddn_2019` (
   `PROVINSI_ID` int(11) NOT NULL,
   `SATUAN_ID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `sbtpddn_2019`
+--
+
+INSERT INTO `sbtpddn_2019` (`ID`, `BESARAN`, `STATUS`, `CREATE_DATE`, `UPDATE_DATE`, `PROVINSI_ID`, `SATUAN_ID`) VALUES
+(2, '123000', '1', '2019-01-17 14:30:23', '2019-01-17 14:30:23', 1, 3),
+(3, '127', '1', '2019-01-17 15:33:44', '2019-01-17 15:33:44', 2, 3);
 
 -- --------------------------------------------------------
 
@@ -252,6 +304,15 @@ CREATE TABLE `sbtppddnpp_2019` (
   `KOTA_TUJUAN_ID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `sbtppddnpp_2019`
+--
+
+INSERT INTO `sbtppddnpp_2019` (`ID`, `BISNIS`, `EKONOMI`, `STATUS`, `CREATE_DATE`, `UPDATE_DATE`, `KOTA_ASAL_ID`, `KOTA_TUJUAN_ID`) VALUES
+(2, '1121', '122121', '1', '2019-01-17 15:01:25', '2019-01-17 15:01:25', 2, 1),
+(3, '112122', '1112222', '1', '2019-01-17 15:01:39', '2019-01-17 15:01:39', 3, 1),
+(4, '11', '111', '1', '2019-01-17 15:02:41', '2019-01-17 15:02:41', 1, 3);
+
 -- --------------------------------------------------------
 
 --
@@ -269,6 +330,14 @@ CREATE TABLE `sbuhpddn_2019` (
   `PROVINSI_ID` int(11) NOT NULL,
   `SATUAN_ID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `sbuhpddn_2019`
+--
+
+INSERT INTO `sbuhpddn_2019` (`ID`, `LUAR_KOTA`, `DALAM_KOTA`, `DIKLAT`, `STATUS`, `CREATE_DATE`, `UPDATE_DATE`, `PROVINSI_ID`, `SATUAN_ID`) VALUES
+(1, '360000', '140000', '110000', '1', '2019-01-17 11:45:16', '2019-01-17 12:11:35', 1, 2),
+(3, '11', '11', '111', '1', '2019-01-17 15:36:23', '2019-01-17 15:36:23', 5, 2);
 
 -- --------------------------------------------------------
 
@@ -420,31 +489,31 @@ ALTER TABLE `user_info`
 -- AUTO_INCREMENT for table `app_data`
 --
 ALTER TABLE `app_data`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `daftar_sbm`
 --
 ALTER TABLE `daftar_sbm`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `kota`
 --
 ALTER TABLE `kota`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `menu`
 --
 ALTER TABLE `menu`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `provinsi`
 --
 ALTER TABLE `provinsi`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `role`
@@ -456,37 +525,37 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT for table `role_menu`
 --
 ALTER TABLE `role_menu`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `satuan`
 --
 ALTER TABLE `satuan`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `sbppddn_2019`
 --
 ALTER TABLE `sbppddn_2019`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `sbtpddn_2019`
 --
 ALTER TABLE `sbtpddn_2019`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `sbtppddnpp_2019`
 --
 ALTER TABLE `sbtppddnpp_2019`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `sbuhpddn_2019`
 --
 ALTER TABLE `sbuhpddn_2019`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `user`
