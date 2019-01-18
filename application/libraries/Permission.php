@@ -3,6 +3,7 @@
 $roles = array(
 			'' => array (
 				'home' => array ('index', 'list', 'insert', 'update', 'update_status', 'delete'),
+				'sbuhpddn' => array ('index', 'list', 'detail'),	
 			),
 			'administrator' => array (
 				'assignmenu' => array ('index', 'list', 'insert', 'update', 'delete'),
