@@ -7,17 +7,18 @@ class Home extends CI_Controller {
 	public function __construct(){
 		parent::__construct();
 		$this->load->library('session');
-		$this->load->library('auth');			
+		$this->load->library('auth');				
 		$this->load->helper('url');			
 		$this->load->database();
-		$this->load->model('menu_model');	
+		$this->load->model('app_data_model');		
+		$this->data['app_data'] = $this->app_data_model->get();		
 		$this->data['error'] = array();
 		$this->data['title'] = 'Home';
 	}
 
 	public function index(){	
-		$this->data['subtitle'] = 'Home';			
+		$this->data['subtitle'] = 'Home';
+		$this->load->view('main_home', $this->data);		
 	}
-	
 }
 
