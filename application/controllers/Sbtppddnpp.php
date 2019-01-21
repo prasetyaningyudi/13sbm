@@ -14,8 +14,13 @@ class Sbtppddnpp extends CI_Controller {
 		$this->load->model('kota_model');
 		$this->load->model('role_model');
 		$this->load->model('menu_model');
-		$this->data['menu'] = $this->menu_model->get_menu($this->session->userdata('ROLE_ID'));
-		$this->data['sub_menu'] = $this->menu_model->get_sub_menu($this->session->userdata('ROLE_ID'));	
+		if(isset($this->session->userdata['is_logged_in'])){
+			$this->data['menu'] = $this->menu_model->get_menu($this->session->userdata('ROLE_ID'));
+			$this->data['sub_menu'] = $this->menu_model->get_sub_menu($this->session->userdata('ROLE_ID'));
+		}else{
+			$this->data['menu'] = $this->menu_model->get_menu($this->menu_model->get_guest_id('guest'));
+			$this->data['sub_menu'] = $this->menu_model->get_sub_menu($this->menu_model->get_guest_id('guest'));			
+		}
 		$this->load->model('app_data_model');		
 		$this->data['app_data'] = $this->app_data_model->get();		
 		$this->data['error'] = array();
@@ -86,7 +91,6 @@ class Sbtppddnpp extends CI_Controller {
 						(object) array( 'classes' => ' align-left ', 'value' => $value->KOTA_TUJUAN ),					
 						(object) array( 'classes' => ' align-right ', 'value' => number_format($value->BISNIS, 0, ',', '.') ),
 						(object) array( 'classes' => ' align-right ', 'value' => number_format($value->EKONOMI, 0, ',', '.') ),
-						(object) array( 'classes' => ' align-center ', 'value' => $value->STATUS ),
 					);
 					$no_body++;
 				}
@@ -101,8 +105,7 @@ class Sbtppddnpp extends CI_Controller {
 			array (
 				(object) array ('rowspan' => 2, 'classes' => 'bold align-center capitalize', 'value' => 'No'),
 				(object) array ('colspan' => 2, 'classes' => 'bold align-center capitalize', 'value' => 'kota'),					
-				(object) array ('colspan' => 2, 'classes' => 'bold align-center capitalize', 'value' => 'satuan biaya tiket'),
-				(object) array ('rowspan' => 2, 'classes' => 'bold align-center capitalize', 'value' => 'status'),					
+				(object) array ('colspan' => 2, 'classes' => 'bold align-center capitalize', 'value' => 'satuan biaya tiket'),				
 			),
 			array (
 				(object) array ('rowspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'Asal'),					
@@ -147,25 +150,48 @@ class Sbtppddnpp extends CI_Controller {
 		);				
 	
 
-		$this->data['list'] = (object) array (
-			'type'  	=> 'table_default',
-			'data'		=> (object) array (
-				'classes'  	=> 'striped bordered hover',
-				'insertable'=> true,
-				'editable'	=> true,
-				'deletable'	=> true,
-				'statusable'=> true,
-				'detailable'=> true,
-				'pdf'		=> false,
-				'xls'		=> false,
-				'pagination'=> $limit,
-				'filters'  	=> $fields,
-				'toolbars'	=> null,
-				'header'  	=> $header,
-				'body'  	=> $body,
-				'footer'  	=> null,
-			)		
-		);		
+		if($this->session->userdata('ROLE_NAME') == 'administrator'){
+			$this->data['list'] = (object) array (
+				'type'  	=> 'table_default',
+				'data'		=> (object) array (
+					'classes'  	=> 'striped bordered hover',
+					'insertable'=> true,
+					'editable'	=> true,
+					'deletable'	=> true,
+					'statusable'=> true,
+					'detailable'=> true,
+					'pdf'		=> false,
+					'xls'		=> false,
+					'pagination'=> $limit,
+					'filters'  	=> $fields,
+					'toolbars'	=> null,
+					'header'  	=> $header,
+					'body'  	=> $body,
+					'footer'  	=> null,
+				)		
+			);
+		}else{
+			$this->data['list'] = (object) array (
+				'type'  	=> 'table_default',
+				'data'		=> (object) array (
+					'classes'  	=> 'striped bordered hover',
+					'insertable'=> false,
+					'editable'	=> false,
+					'deletable'	=> false,
+					'statusable'=> false,
+					'detailable'=> true,
+					'pdf'		=> false,
+					'xls'		=> false,
+					'pagination'=> $limit,
+					'filters'  	=> $fields,
+					'toolbars'	=> null,
+					'header'  	=> $header,
+					'body'  	=> $body,
+					'footer'  	=> null,
+				)		
+			);
+
+		}		
 		echo json_encode($this->data['list']);
 	}
 	
@@ -488,18 +514,20 @@ class Sbtppddnpp extends CI_Controller {
 						(object) array( 'classes' => ' bold align-left ', 'value' => 'Ekonomi' ),
 						(object) array( 'classes' => ' align-left ', 'value' => number_format($value->EKONOMI, 0, ',', '.') ),
 					);					
-					$body[] = array(
-						(object) array( 'classes' => ' bold align-left ', 'value' => 'Status' ),
-						(object) array( 'classes' => ' align-left ', 'value' => $value->STATUS ),
-					);					
-					$body[] = array(
-						(object) array( 'classes' => ' bold align-left ', 'value' => 'Create Date' ),
-						(object) array( 'classes' => ' align-left ', 'value' => $value->CREATE_DATE ),
-					);
-					$body[] = array(
-						(object) array( 'classes' => ' bold align-left ', 'value' => 'Update Date' ),
-						(object) array( 'classes' => ' align-left ', 'value' => $value->UPDATE_DATE ),
-					);			
+					if($this->session->userdata('ROLE_NAME') == 'administrator'){
+						$body[] = array(
+							(object) array( 'classes' => ' bold align-left ', 'value' => 'Status' ),
+							(object) array( 'classes' => ' align-left ', 'value' => $value->STATUS ),
+						);					
+						$body[] = array(
+							(object) array( 'classes' => ' bold align-left ', 'value' => 'Create Date' ),
+							(object) array( 'classes' => ' align-left ', 'value' => $value->CREATE_DATE ),
+						);
+						$body[] = array(
+							(object) array( 'classes' => ' bold align-left ', 'value' => 'Update Date' ),
+							(object) array( 'classes' => ' align-left ', 'value' => $value->UPDATE_DATE ),
+						);
+					}		
 				}
 			}
 			

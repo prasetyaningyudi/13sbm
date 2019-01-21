@@ -4,6 +4,9 @@ $roles = array(
 			'' => array (
 				'home' => array ('index', 'list', 'insert', 'update', 'update_status', 'delete'),
 				'sbuhpddn' => array ('index', 'list', 'detail'),	
+				'sbppddn' => array ('index', 'list', 'detail'),	
+				'sbtpddn' => array ('index', 'list', 'detail'),	
+				'sbtppddnpp' => array ('index', 'list', 'detail'),	
 			),
 			'administrator' => array (
 				'assignmenu' => array ('index', 'list', 'insert', 'update', 'delete'),
