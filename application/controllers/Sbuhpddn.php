@@ -81,7 +81,6 @@ class Sbuhpddn extends CI_Controller {
 						(object) array( 'classes' => ' align-right ', 'value' => number_format($value->LUAR_KOTA, 0, ',', '.') ),
 						(object) array( 'classes' => ' align-right ', 'value' => number_format($value->DALAM_KOTA, 0, ',', '.') ),
 						(object) array( 'classes' => ' align-right ', 'value' => number_format($value->DIKLAT, 0, ',', '.') ),
-						(object) array( 'classes' => ' align-center ', 'value' => $value->STATUS ),
 					);
 					$no_body++;
 				}
@@ -99,8 +98,7 @@ class Sbuhpddn extends CI_Controller {
 				(object) array ('rowspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'satuan'),			
 				(object) array ('rowspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'luar kota'),			
 				(object) array ('rowspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'dalam kota lebih dari 8 jam'),		
-				(object) array ('rowspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'diklat'),		
-				(object) array ('rowspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'status'),		
+				(object) array ('rowspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'diklat'),			
 			)		
 		);
 		
@@ -126,26 +124,48 @@ class Sbuhpddn extends CI_Controller {
 			',
 		);				
 	
+		if($this->session->userdata('ROLE_NAME') == 'administrator'){
+			$this->data['list'] = (object) array (
+				'type'  	=> 'table_default',
+				'data'		=> (object) array (
+					'classes'  	=> 'striped bordered hover',
+					'insertable'=> true,
+					'editable'	=> true,
+					'deletable'	=> true,
+					'statusable'=> true,
+					'detailable'=> true,
+					'pdf'		=> false,
+					'xls'		=> false,
+					'pagination'=> $limit,
+					'filters'  	=> $fields,
+					'toolbars'	=> null,
+					'header'  	=> $header,
+					'body'  	=> $body,
+					'footer'  	=> null,
+				)		
+			);
+		}else{
+			$this->data['list'] = (object) array (
+				'type'  	=> 'table_default',
+				'data'		=> (object) array (
+					'classes'  	=> 'striped bordered hover',
+					'insertable'=> false,
+					'editable'	=> false,
+					'deletable'	=> false,
+					'statusable'=> false,
+					'detailable'=> true,
+					'pdf'		=> false,
+					'xls'		=> false,
+					'pagination'=> $limit,
+					'filters'  	=> $fields,
+					'toolbars'	=> null,
+					'header'  	=> $header,
+					'body'  	=> $body,
+					'footer'  	=> null,
+				)		
+			);
 
-		$this->data['list'] = (object) array (
-			'type'  	=> 'table_default',
-			'data'		=> (object) array (
-				'classes'  	=> 'striped bordered hover',
-				'insertable'=> true,
-				'editable'	=> true,
-				'deletable'	=> true,
-				'statusable'=> true,
-				'detailable'=> true,
-				'pdf'		=> false,
-				'xls'		=> false,
-				'pagination'=> $limit,
-				'filters'  	=> $fields,
-				'toolbars'	=> null,
-				'header'  	=> $header,
-				'body'  	=> $body,
-				'footer'  	=> null,
-			)		
-		);		
+		}	
 		echo json_encode($this->data['list']);
 	}
 	
@@ -525,18 +545,20 @@ class Sbuhpddn extends CI_Controller {
 						(object) array( 'classes' => ' bold align-left ', 'value' => 'Diklat' ),
 						(object) array( 'classes' => ' align-left ', 'value' => number_format($value->DIKLAT, 0, ',', '.') ),
 					);
-					$body[] = array(
-						(object) array( 'classes' => ' bold align-left ', 'value' => 'Status' ),
-						(object) array( 'classes' => ' align-left ', 'value' => $value->STATUS ),
-					);					
-					$body[] = array(
-						(object) array( 'classes' => ' bold align-left ', 'value' => 'Create Date' ),
-						(object) array( 'classes' => ' align-left ', 'value' => $value->CREATE_DATE ),
-					);
-					$body[] = array(
-						(object) array( 'classes' => ' bold align-left ', 'value' => 'Update Date' ),
-						(object) array( 'classes' => ' align-left ', 'value' => $value->UPDATE_DATE ),
-					);			
+					if($this->session->userdata('ROLE_NAME') == 'administrator'){
+						$body[] = array(
+							(object) array( 'classes' => ' bold align-left ', 'value' => 'Status' ),
+							(object) array( 'classes' => ' align-left ', 'value' => $value->STATUS ),
+						);					
+						$body[] = array(
+							(object) array( 'classes' => ' bold align-left ', 'value' => 'Create Date' ),
+							(object) array( 'classes' => ' align-left ', 'value' => $value->CREATE_DATE ),
+						);
+						$body[] = array(
+							(object) array( 'classes' => ' bold align-left ', 'value' => 'Update Date' ),
+							(object) array( 'classes' => ' align-left ', 'value' => $value->UPDATE_DATE ),
+						);
+					}					
 				}
 			}
 			

@@ -42,7 +42,11 @@
               </div>
               <div class="profile_info">
                 <span>Welcome,</span>
-                <h2><?php echo $this->session->USERNAME; ?></h2>
+				<?php if(isset($this->session->userdata['is_logged_in'])): ?>
+					<h2><?php echo $this->session->USERNAME; ?></h2>
+				<?php else: ?>
+					<h2><?php echo 'Guest'; ?></h2>
+				<?php endif; ?>
               </div>
             </div>
             <!-- /menu profile quick info -->
@@ -122,9 +126,15 @@
               <a data-toggle="tooltip" data-placement="top" title="Lock">
                 <i class="fa fa-lock"></i>
               </a>
-              <a data-toggle="tooltip" data-placement="top" title="Logout" href="<?php echo base_url().'authentication/logout/'; ?>">
-                <i class="fas fa-sign-out-alt"></i>
-              </a>
+			  <?php if(isset($this->session->userdata['is_logged_in'])): ?>
+				  <a data-toggle="tooltip" data-placement="top" title="Logout" href="<?php echo base_url().'authentication/logout/'; ?>">
+					<i class="fas fa-sign-out-alt"></i>
+				  </a>
+			  <?php else: ?>
+				  <a data-toggle="tooltip" data-placement="top" title="Login" href="<?php echo base_url().'authentication/login/'; ?>">
+					<i class="fas fa-sign-in-alt"></i>
+				  </a>			  
+			  <?php endif; ?>
             </div>
             <!-- /menu footer buttons -->
           </div>

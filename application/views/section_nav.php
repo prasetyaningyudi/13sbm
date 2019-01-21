@@ -31,8 +31,16 @@
                     <span class=" fa fa-angle-down"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
-				    <li><a href="javascript:;">Login as <?php echo $this->session->ROLE_NAME; ?></a></li>
-                    <li><a href="<?php echo base_url().'user/'; ?>"> Profile</a></li>
+				    <li><a href="javascript:;">Login as 
+						<?php if(isset($this->session->userdata['is_logged_in'])): ?>
+							<?php echo $this->session->ROLE_NAME; ?>
+						<?php else: ?>
+							<?php echo 'Guest'; ?>
+						<?php endif; ?>
+					</a></li>
+					<?php if(isset($this->session->userdata['is_logged_in'])): ?>
+						<li><a href="<?php echo base_url().'user/'; ?>"> Profile</a></li>
+					<?php endif; ?>
                     <!-- <li>
                       <a href="javascript:;">
                         <span class="badge bg-red pull-right">50%</span>
@@ -40,7 +48,11 @@
                       </a>
                     </li>
                     <li><a href="javascript:;">Help</a></li> -->
-                    <li><a href="<?php echo base_url().'authentication/logout/'; ?>"><i class="fas fa-sign-out-alt"></i> Log Out</a></li>
+					<?php if(isset($this->session->userdata['is_logged_in'])): ?>
+						<li><a href="<?php echo base_url().'authentication/logout/'; ?>"><i class="fas fa-sign-out-alt"></i> Log Out</a></li>
+					<?php else: ?>
+						<li><a href="<?php echo base_url().'authentication/login/'; ?>"><i class="fas fa-sign-in-alt"></i> Log In</a></li>
+					<?php endif; ?>
                   </ul>
 				  </li>
               </ul>
