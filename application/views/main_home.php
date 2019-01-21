@@ -34,7 +34,7 @@
 				echo '';
 			} 
 			if(isset($title)){
-				echo ucwords(strtolower($title));
+				echo $title;
 			}else{
 				echo 'Untitled';
 			}
@@ -63,6 +63,10 @@
 	
 	<!-- Custom stlylesheet -->
 	<link href="<?php echo base_url(); ?>assets/css/home_style.css" rel="stylesheet">
+	
+    <!-- Select2 -->
+    <link href="<?php echo base_url(); ?>assets/vendors/select2/select2.min.css" rel="stylesheet">	
+    <script src="<?php echo base_url(); ?>assets/vendors/select2/select2.min.js"></script>		
 </head>
 
 <body>
@@ -122,7 +126,12 @@
 							<h1 class="white-text">STANDAR BIAYA MASUKAN <br>TA 2019</h1>
 							<p class="white-text">Berdasarkan pada Peraturan Menteri Keuangan Republik Indonesia Nomor 32 / PMK.02/2018 <br>tentang Standar Biaya Masukan Tahun Anggaran 2019.
 							</p>
-							<button class="white-btn">Get Started!</button>
+							<select class="select-single form-control" name="sbm" style="width: 70%;">
+								<option value="0">-- Pilih Daftar SBM --</option>
+								<?php foreach($result as $value): ?>
+									<option value="<?php echo $value->KODE; ?>"><?php echo $value->KETERANGAN; ?></option>
+								<?php endforeach; ?>
+							</select>
 						</div>
 					</div>
 					<!-- /home content -->
@@ -260,6 +269,11 @@ tentang Standar Biaya Masukan Tahun Anggaran 2019.<br><br><br></p>
 	<!-- /Preloader -->
 
 	<script src="<?php echo base_url(); ?>assets/js/home_main.js"></script>
+	<script>
+	$(document).ready(function() {
+		$('.select-single').select2();
+	}); 
+	</script>	
 
 </body>
 
