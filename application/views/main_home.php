@@ -268,12 +268,21 @@ tentang Standar Biaya Masukan Tahun Anggaran 2019.<br><br><br></p>
 	</div>
 	<!-- /Preloader -->
 
-	<script src="<?php echo base_url(); ?>assets/js/home_main.js"></script>
-	<script>
-	$(document).ready(function() {
-		$('.select-single').select2();
-	}); 
-	</script>	
+<script src="<?php echo base_url(); ?>assets/js/home_main.js"></script>
+<script>
+$(document).ready(function() {
+	$('.select-single').select2();
+	$(".select-single").on('change', function(){
+		$( ".select-single option:selected" ).each(function() {
+			var baseurl="<?php echo base_url(); ?>";
+			if($(this).val() !== '0'){
+				console.log($( this ).val().toLowerCase());
+				window.location.replace(baseurl+$(this).val().toLowerCase());
+			}
+		});
+	});
+});
+</script>	
 
 </body>
 
