@@ -14,7 +14,7 @@ class Home extends CI_Controller {
 		$this->load->model('daftar_sbm_model');		
 		$this->data['app_data'] = $this->app_data_model->get();		
 		$this->data['error'] = array();
-		$this->data['title'] = 'SBM '.date('Y');
+		$this->data['title'] = 'Standar Biaya Masukan '.date('Y');
 	}
 
 	public function index(){	
