@@ -2,11 +2,15 @@
 
 $roles = array(
 			'' => array (
-				'home' => array ('index', 'list', 'insert', 'update', 'update_status', 'delete'),
+				'home' => array ('index'),
 				'sbuhpddn' => array ('index', 'list', 'detail'),	
 				'sbppddn' => array ('index', 'list', 'detail'),	
 				'sbtpddn' => array ('index', 'list', 'detail'),	
-				'sbtppddnpp' => array ('index', 'list', 'detail'),	
+				'sbtppddnpp' => array ('index', 'list', 'detail'),
+				'daftar_sbm' => array ('index', 'list'),							
+				'satuan' => array ('index', 'list'),							
+				'provinsi' => array ('index', 'list'),							
+				'kota' => array ('index', 'list'),					
 			),
 			'administrator' => array (
 				'assignmenu' => array ('index', 'list', 'insert', 'update', 'delete'),

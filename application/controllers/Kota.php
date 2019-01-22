@@ -12,8 +12,13 @@ class Kota extends CI_Controller {
 		$this->load->database();
 		$this->load->model('kota_model');
 		$this->load->model('menu_model');
-		$this->data['menu'] = $this->menu_model->get_menu($this->session->userdata('ROLE_ID'));
-		$this->data['sub_menu'] = $this->menu_model->get_sub_menu($this->session->userdata('ROLE_ID'));	
+		if(isset($this->session->userdata['is_logged_in'])){
+			$this->data['menu'] = $this->menu_model->get_menu($this->session->userdata('ROLE_ID'));
+			$this->data['sub_menu'] = $this->menu_model->get_sub_menu($this->session->userdata('ROLE_ID'));
+		}else{
+			$this->data['menu'] = $this->menu_model->get_menu($this->menu_model->get_guest_id('guest'));
+			$this->data['sub_menu'] = $this->menu_model->get_sub_menu($this->menu_model->get_guest_id('guest'));			
+		}
 		$this->load->model('app_data_model');		
 		$this->data['app_data'] = $this->app_data_model->get();	
 		$this->data['error'] = array();
@@ -38,7 +43,7 @@ class Kota extends CI_Controller {
 			redirect ('authentication/unauthorized');
 		}		
 		$filters = array();
-		$limit = array('15', '0');
+		$limit = array('20', '0');
 		$r_nama = '';
 
 		//var_dump($_POST['nama']);
@@ -102,26 +107,48 @@ class Kota extends CI_Controller {
 			'value' 		=> $r_nama,
 			'classes' 		=> 'full-width',
 		);		
-
-		$this->data['list'] = (object) array (
-			'type'  	=> 'table_default',
-			'data'		=> (object) array (
-				'classes'  	=> 'striped bordered hover',
-				'insertable'=> true,
-				'editable'	=> true,
-				'deletable'	=> true,
-				'statusable'=> false,
-				'detailable'=> true,
-				'pdf'		=> false,
-				'xls'		=> false,
-				'pagination'=> $limit,
-				'filters'  	=> $fields,
-				'toolbars'	=> null,
-				'header'  	=> $header,
-				'body'  	=> $body,
-				'footer'  	=> null,
-			)
-		);		
+		
+		if($this->session->userdata('ROLE_NAME') == 'administrator'){
+			$this->data['list'] = (object) array (
+				'type'  	=> 'table_default',
+				'data'		=> (object) array (
+					'classes'  	=> 'striped bordered hover',
+					'insertable'=> true,
+					'editable'	=> true,
+					'deletable'	=> true,
+					'statusable'=> false,
+					'detailable'=> true,
+					'pdf'		=> false,
+					'xls'		=> false,
+					'pagination'=> $limit,
+					'filters'  	=> $fields,
+					'toolbars'	=> null,
+					'header'  	=> $header,
+					'body'  	=> $body,
+					'footer'  	=> null,
+				)
+			);
+		}else{
+			$this->data['list'] = (object) array (
+				'type'  	=> 'table_default',
+				'data'		=> (object) array (
+					'classes'  	=> 'striped bordered hover',
+					'insertable'=> false,
+					'editable'	=> false,
+					'deletable'	=> false,
+					'statusable'=> false,
+					'detailable'=> false,
+					'pdf'		=> false,
+					'xls'		=> false,
+					'pagination'=> $limit,
+					'filters'  	=> $fields,
+					'toolbars'	=> null,
+					'header'  	=> $header,
+					'body'  	=> $body,
+					'footer'  	=> null,
+				)
+			);			
+		}
 		echo json_encode($this->data['list']);
 	}
 	
